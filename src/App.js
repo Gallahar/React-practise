@@ -1,174 +1,60 @@
+import React from "react";
 import Card from "./components/Card";
 import Header from "./components/Header";
 import Drawer from "./components/Drawer";
 
 
+
 function App() {
-  return (
-    <div className="wrapper clear">
-            <Drawer />
-        <Header />
-        <div className="content p-40">
-            <div className="d-flex align-center mb-40 justify-between">
-                <h1>Все кроссовки</h1>
-                <div className="search-block d-flex">
-                    <img src="img/Search.svg" alt="search" />
-                    <input placeholder="Поиск..."/>
-                </div>
-            </div>
-            <div className="d-flex">
-            <Card />
-                <div className="card">
-                    <img width={133} height={112} src="/img/sneakers/image 2.jpg" alt="Sneakers"/>
-                    <h5>Мужские Кроссовки Nike Blazer Mid Suede</h5>
-                    <div className="d-flex justify-between align-center">
-                        <div className="d-flex flex-column">
-                            <span>Цена:</span>
-                            <b>12 999 руб.</b>
-                        </div>
-                        <button className="button">
-                            <img width={11} height={11} src="/img/add.svg" alt="add"/>
-                        </button>
+    const [products,setProducts] = React.useState([])
+    const [cartProducts,setCartProducts] = React.useState([])
+    const [searchInput,setSearchInput] = React.useState('')
+    const [cartOpened, setCartOpened] = React.useState(false)
+    React.useEffect(()=>{
+        fetch('https://6339c674d6ef071af8164d58.mockapi.io/products').then((res)=>{
+            return res.json()
+        }).then((json)=>{
+            setProducts(json)
+        })
+    },[])
+
+    const onAddToCart = (obj) =>{
+     return   cartProducts.hasOwnProperty(obj)?[...new Set(cartProducts)]:setCartProducts([...cartProducts,obj])
+    };
+
+    const onChangeSearchInput = (event)=>{
+        setSearchInput(event.target.value)
+
+    }
+
+    return (
+        <div className="wrapper clear">
+            {cartOpened && <Drawer products={cartProducts} onClose={() => setCartOpened(false)}/>}
+            <Header onClickCart={() => setCartOpened(true)}/>
+            <div className="content p-40 ">
+                <div className="d-flex align-center mb-40 justify-between">
+                    <h1>{searchInput?`Поиск по запросу: "${searchInput}"`:'Все кроссовки'}</h1>
+                    <div className="search-block  d-flex">
+                        <img src="img/Search.svg" alt="search"/>
+                        {searchInput&&<img className="removeBtn Clear cu-p" src="img/btn-remove.svg" onClick={()=>setSearchInput('')} alt="Clear"/>}
+                        <input placeholder="Поиск..." value={searchInput} onChange={onChangeSearchInput }/>
                     </div>
                 </div>
-                <div className="card">
-                    <img width={133} height={112} src="/img/sneakers/image 3.jpg" alt="Sneakers"/>
-                    <h5>Мужские Кроссовки Nike Blazer Mid Suede</h5>
-                    <div className="d-flex justify-between align-center">
-                        <div className="d-flex flex-column">
-                            <span>Цена:</span>
-                            <b>12 999 руб.</b>
-                        </div>
-                        <button className="button">
-                            <img width={11} height={11} src="/img/add.svg" alt="add"/>
-                        </button>
-                    </div>
-                </div>
-                <div className="card">
-                    <img width={133} height={112} src="/img/sneakers/image 4.jpg" alt="Sneakers"/>
-                    <h5>Мужские Кроссовки Nike Blazer Mid Suede</h5>
-                    <div className="d-flex justify-between align-center">
-                        <div className="d-flex flex-column">
-                            <span>Цена:</span>
-                            <b>12 999 руб.</b>
-                        </div>
-                        <button className="button">
-                            <img width={11} height={11} src="/img/add.svg" alt="add"/>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div className="d-flex">
-                <div className="card">
-                    <img width={133} height={112} src="/img/sneakers/image 5.jpg" alt="Sneakers"/>
-                    <h5>Мужские Кроссовки Nike Blazer Mid Suede</h5>
-                    <div className="d-flex justify-between align-center">
-                        <div className="d-flex flex-column">
-                            <span>Цена:</span>
-                            <b>12 999 руб.</b>
-                        </div>
-                        <button className="button">
-                            <img width={11} height={11} src="/img/add.svg" alt="add"/>
-                        </button>
-                    </div>
-                </div>
-                <div className="card">
-                    <img width={133} height={112} src="/img/sneakers/image 6.jpg" alt="Sneakers"/>
-                    <h5>Мужские Кроссовки Nike Blazer Mid Suede</h5>
-                    <div className="d-flex justify-between align-center">
-                        <div className="d-flex flex-column">
-                            <span>Цена:</span>
-                            <b>12 999 руб.</b>
-                        </div>
-                        <button className="button">
-                            <img width={11} height={11} src="/img/add.svg" alt="add"/>
-                        </button>
-                    </div>
-                </div>
-                <div className="card">
-                    <img width={133} height={112} src="/img/sneakers/image 7.jpg" alt="Sneakers"/>
-                    <h5>Мужские Кроссовки Nike Blazer Mid Suede</h5>
-                    <div className="d-flex justify-between align-center">
-                        <div className="d-flex flex-column">
-                            <span>Цена:</span>
-                            <b>12 999 руб.</b>
-                        </div>
-                        <button className="button">
-                            <img width={11} height={11} src="/img/add.svg" alt="add"/>
-                        </button>
-                    </div>
-                </div>
-                <div className="card">
-                    <img width={133} height={112} src="/img/sneakers/image 8.jpg" alt="Sneakers"/>
-                    <h5>Мужские Кроссовки Nike Blazer Mid Suede</h5>
-                    <div className="d-flex justify-between align-center">
-                        <div className="d-flex flex-column">
-                            <span>Цена:</span>
-                            <b>12 999 руб.</b>
-                        </div>
-                        <button className="button">
-                            <img width={11} height={11} src="/img/add.svg" alt="add"/>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div className="d-flex">
-                <div className="card">
-                    <img width={133} height={112} src="/img/sneakers/image 9.jpg" alt="Sneakers"/>
-                    <h5>Мужские Кроссовки Nike Blazer Mid Suede</h5>
-                    <div className="d-flex justify-between align-center">
-                        <div className="d-flex flex-column">
-                            <span>Цена:</span>
-                            <b>12 999 руб.</b>
-                        </div>
-                        <button className="button">
-                            <img width={11} height={11} src="/img/add.svg" alt="add"/>
-                        </button>
-                    </div>
-                </div>
-                <div className="card">
-                    <img width={133} height={112} src="/img/sneakers/image 10.png" alt="Sneakers"/>
-                    <h5>Мужские Кроссовки Nike Blazer Mid Suede</h5>
-                    <div className="d-flex justify-between align-center">
-                        <div className="d-flex flex-column">
-                            <span>Цена:</span>
-                            <b>12 999 руб.</b>
-                        </div>
-                        <button className="button">
-                            <img width={11} height={11} src="/img/add.svg" alt="add"/>
-                        </button>
-                    </div>
-                </div>
-                <div className="card">
-                    <img width={133} height={112} src="/img/sneakers/image 11.png" alt="Sneakers"/>
-                    <h5>Мужские Кроссовки Nike Blazer Mid Suede</h5>
-                    <div className="d-flex justify-between align-center">
-                        <div className="d-flex flex-column">
-                            <span>Цена:</span>
-                            <b>12 999 руб.</b>
-                        </div>
-                        <button className="button">
-                            <img width={11} height={11} src="/img/add.svg" alt="add"/>
-                        </button>
-                    </div>
-                </div>
-                <div className="card">
-                    <img width={133} height={112} src="/img/sneakers/image 12.jpg" alt="Sneakers"/>
-                    <h5>Мужские Кроссовки Nike Blazer Mid Suede</h5>
-                    <div className="d-flex justify-between align-center">
-                        <div className="d-flex flex-column">
-                            <span>Цена:</span>
-                            <b>12 999 руб.</b>
-                        </div>
-                        <button className="button">
-                            <img width={11} height={11} src="/img/add.svg" alt="add"/>
-                        </button>
-                    </div>
+                <div className="d-flex flex-wrap">
+                    {products.map((product) => (
+                        <Card
+                              key={product.imgUrl}
+                              price={product.price}
+                              imgUrl={product.imgUrl}
+                              tittle={product.tittle}
+                              onAdd={onAddToCart}
+                              onFavorite={()=>console.log('добавили в любимое')}
+                        />
+                    ))}
                 </div>
             </div>
         </div>
-    </div>
-  );
+    );
 }
 
 export default App;
