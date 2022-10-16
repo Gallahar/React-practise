@@ -42,7 +42,7 @@ function Card({
                 <rect x="118" y="162" rx="8" ry="8" width="32" height="32"/>
             </ContentLoader> : <>
                 <div className={styles.favorite} onClick={onClickFavorite}>
-                    <img src={isFavorite ? "/img/heart-liked.svg" : "/img/heart-unliked.svg"} alt="favorite"/>
+                    <img src={isFavorite ? "img/heart-liked.svg" : "img/heart-unliked.svg"} alt="favorite"/>
                 </div>
                 <img width={133} height={112} src={imgUrl} alt="Sneakers"/>
                 <h5>{tittle}</h5>
@@ -53,7 +53,7 @@ function Card({
                     </div>
                     {onAdd &&
                         (<img onClick={onClickAdd} className={styles.plus}
-                             src={isProductChecked(id) ? "/img/btn-checked.svg" : "/img/add.svg"} alt="add"/>)}
+                             src={isProductChecked(id) ? "img/btn-checked.svg" : "img/add.svg"} alt="add"/>)}
                 </div>
             </>}
         </div>

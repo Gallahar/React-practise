@@ -110,7 +110,7 @@ function App() {
                 />
                 <Header onClickCart={() => setCartOpened(true)}/>
                 <Routes>
-                    <Route path="/" element={<Home cartProducts={cartProducts}
+                    <Route path="" element={<Home cartProducts={cartProducts}
                                                    searchInput={searchInput}
                                                    setSearchInput={setSearchInput}
                                                    onChangeSearchInput={onChangeSearchInput}
@@ -121,9 +121,9 @@ function App() {
                     />}
 
                     />
-                    <Route path="/favorites"
+                    <Route path="favorites"
                            element={<Favorites isLoading={isLoading}/>}/>
-                    <Route path="/purchases"
+                    <Route path="purchases"
                            element={<Purchases isLoading={isLoading}/>}/>
                 </Routes>
             </div>

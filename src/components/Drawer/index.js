@@ -29,7 +29,7 @@ function Drawer({onRemoveFromCart, products, opened}) {
         }
         setOrderPending(!orderPending)
     }
-
+//lock drawer scroll
     useEffect(() => {
         if (opened) {
             document.body.style.overflow = 'hidden'
@@ -78,13 +78,13 @@ function Drawer({onRemoveFromCart, products, opened}) {
                             </ul>
                             <button disabled={orderPending} onClick={onClickOrder} className="greenButton">Оформить
                                 заказ <img
-                                    src="/img/arrowRight.svg" alt="arrowRight"/>
+                                    src="img/arrowRight.svg" alt="arrowRight"/>
                             </button>
                         </div>
                     </> :
                     <State title={isOrderProceed ? "Заказ оформлен!" : "В корзине ничего нет..."}
                            description={isOrderProceed ? `Ваш заказ №${orderId} скоро будет передан курьерской доставке` : "Добавьте хотя бы одну пару кроссовок чтобы сделать заказ"}
-                           image={isOrderProceed ? "/img/complete-order.jpg" : "/img/empty-cart.jpg"}/>
+                           image={isOrderProceed ? "img/complete-order.jpg" : "img/empty-cart.jpg"}/>
                 }
 
             </div>
