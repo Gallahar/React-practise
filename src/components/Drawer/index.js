@@ -4,13 +4,14 @@ import State from "../State";
 import styles from './Drawer.module.scss'
 import {useCartProducts} from "../hooks/useCartProducts";
 
-function Drawer({onRemoveFromCart, products, opened}) {
+function Drawer({onRemoveFromCart, products = [], opened}) {
     const {cartProducts, totalPriceCart, setCartProducts, setCartOpened} = useCartProducts()
     const [isOrderProceed, setIsOrderProceed] = React.useState(false)
     const [orderId, setOrderId] = React.useState(null)
     const [orderPending, setOrderPending] = React.useState(false)
+
     const onClickOrder = async () => {
-        console.log(cartProducts)
+
         try {
             setOrderPending(!orderPending)
             const {data} = await axios.post('https://6339c674d6ef071af8164d58.mockapi.io/Orders', {products: cartProducts});
@@ -28,6 +29,9 @@ function Drawer({onRemoveFromCart, products, opened}) {
             console.error(error)
         }
         setOrderPending(!orderPending)
+
+
+        console.log(isOrderProceed)
     }
 //lock drawer scroll
     useEffect(() => {
@@ -59,7 +63,7 @@ function Drawer({onRemoveFromCart, products, opened}) {
 
                                         </div>
                                         <div className="mr-20 flex">
-                                            <p className="mb-5">{obj.title}</p>
+                                            <p className="mb-5">{obj.tittle}</p>
                                             <b>{obj.price} руб.</b>
                                         </div>
                                         <img className="removeBtn" onClick={() => onRemoveFromCart(obj.id)}
