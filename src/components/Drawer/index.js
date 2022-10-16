@@ -1,54 +1,58 @@
 import React, {useEffect} from "react";
 import axios from "axios";
-import State from "./State";
-import StorageContext from "../context";
+import State from "../State";
+import styles from './Drawer.module.scss'
+import {useCartProducts} from "../hooks/useCartProducts";
 
-function Drawer({onRemoveFromCart, products}) {
-    const {cartProducts, setCartProducts, setCartOpened} = React.useContext(StorageContext)
+function Drawer({onRemoveFromCart, products, opened}) {
+    const {cartProducts, totalPriceCart, setCartProducts, setCartOpened} = useCartProducts()
     const [isOrderProceed, setIsOrderProceed] = React.useState(false)
     const [orderId, setOrderId] = React.useState(null)
     const [orderPending, setOrderPending] = React.useState(false)
-    const pause = (ms) => new Promise(resolve => setTimeout(resolve,ms));
     const onClickOrder = async () => {
+        console.log(cartProducts)
         try {
             setOrderPending(!orderPending)
             const {data} = await axios.post('https://6339c674d6ef071af8164d58.mockapi.io/Orders', {products: cartProducts});
             setOrderId(data.id)
             setIsOrderProceed(!isOrderProceed)
             setCartProducts([]);
-            for (let i = 0; i <=cartProducts.length ; i++) {
-                const item = cartProducts[i]
-                await axios.delete(`https://6339c674d6ef071af8164d58.mockapi.io/Cart/${item.id}`)
-                await pause(1000)
-            }
 
+            await Promise.all(
+                cartProducts.map(({id}) => {
+                    return axios.delete(`https://6339c674d6ef071af8164d58.mockapi.io/Cart/${id}`)
+                })
+            )
         } catch (error) {
             alert('Не удалось создать заказ.')
+            console.error(error)
         }
         setOrderPending(!orderPending)
     }
 
     useEffect(() => {
-        document.body.style.overflow = 'hidden'
-        window.scrollTo({top: 0})
-        return () => {
+        if (opened) {
+            document.body.style.overflow = 'hidden'
+            window.scrollTo({top: 0})
+        } else {
+
             document.body.style.overflow = 'initial'
+
         }
-    }, [])
+    }, [opened])
 
     return (
-        <div className="drawerDark">
-            <div className="drawer">
+        <div className={`${styles.drawerDark} ${opened ? styles.drawerVisible : ""}`}>
+            <div className={styles.drawer}>
                 <h2 className="mb-30 d-flex justify-between">Корзина<img onClick={() => setCartOpened(false)}
                                                                          className="removeBtn cu-p"
                                                                          src="img/btn-remove.svg" alt="remove"/></h2>
 
                 {products.length > 0 ? <>
-                        <div className="items">
+                        <div className="items flex">
                             {
                                 products.map((obj) =>
                                     <div key={obj.id} className="cartItem d-flex align-center mb-20">
-                                        {console.log(obj)}
                                         <div
                                             style={{backgroundImage: `url(${obj.imgUrl})`}}
                                             className="cartItemImg">
@@ -67,10 +71,10 @@ function Drawer({onRemoveFromCart, products}) {
                             <ul>
                                 <li><span>Итого:</span>
                                     <div></div>
-                                    <b>21 498 руб.</b></li>
+                                    <b>{totalPriceCart} руб.</b></li>
                                 <li><span>Налог 5%:</span>
                                     <div></div>
-                                    <b>1074 руб.</b></li>
+                                    <b>{Math.round(totalPriceCart * 0.05)} руб.</b></li>
                             </ul>
                             <button disabled={orderPending} onClick={onClickOrder} className="greenButton">Оформить
                                 заказ <img

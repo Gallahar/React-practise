@@ -1,8 +1,10 @@
-import React from "react";
+import React,{Fragment} from "react";
 import Card from "../components/Card";
 import StorageContext from "../context";
 
-function Favorites () {
+
+
+function Favorites ({isLoading}) {
     const {favorites,onAddToFavorite} = React.useContext(StorageContext)
     return (
         <div className="content p-40 ">
@@ -10,8 +12,9 @@ function Favorites () {
                 <h1>Товары которые вам понравились:</h1>
             </div>
             <div className="d-flex flex-wrap">
-                {favorites.map((item) => (
-                        <Card
+                {isLoading?  Array(8).fill(undefined).map((_,i)=><Card key={i} loading={isLoading}/>):favorites.map((item,id) => (
+                    <Fragment key={id}>
+                    <Card
                             key={item.id}
                             price={item.price}
                             imgUrl={item.imgUrl}
@@ -20,6 +23,7 @@ function Favorites () {
                             favorited={true}
                             onFavorite={onAddToFavorite}
                         />
+                    </Fragment>
                     ))}
             </div>
         </div>

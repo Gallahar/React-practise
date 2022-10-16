@@ -94,38 +94,7 @@ header {
   }
 }
 
-.drawerDark {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.1);
-  z-index: 1;
 
-}
-
-.drawer {
-  position: absolute;
-  width: 420px;
-  height: 100%;
-  right: 0;
-  background: #FFFFFF;
-  box-shadow: -10px 4px 24px rgba(0, 0, 0, 0.1);
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
-
-  .items {
-    flex: 1;
-    overflow: auto;
-    margin-bottom: 40px;
-  }
-
-  h2 {
-    margin: 0;
-  }
-}
 
 .cartTotalBlock {
   ul {
@@ -231,6 +200,8 @@ header {
     }
   }
 }
+
+
 
 @keyframes Green-Button-loading {
    0%{

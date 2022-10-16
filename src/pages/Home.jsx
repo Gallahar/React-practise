@@ -1,9 +1,7 @@
 import Card from "../components/Card";
-
-import React from "react"
+import React,{Fragment} from "react"
 
 function Home({
-                  cartProducts,
                   searchInput,
                   setSearchInput,
                   onChangeSearchInput,
@@ -13,21 +11,20 @@ function Home({
                   isLoading
               }) {
 
+
     const renderProducts = () => {
         const filteredProducts = products.filter(item => item.tittle.toLowerCase().includes(searchInput.toLowerCase()));
-
-        return (isLoading ? Array(12).fill(<Card  loading={isLoading}/>)
-            : filteredProducts).map((item) => (
+        return   (isLoading ? Array(8).fill(undefined).map((_, i) => <Card onAdd={(obj)=>onAddToCart(obj)} key={i} loading={isLoading}/>)
+            : filteredProducts).map((item,id) => (
+                <Fragment  key={id}>
             <Card
                 key={item.id}
-                id={item.id}
-                price={item.price}
-                imgUrl={item.imgUrl}
-                tittle={item.tittle}
+                {...item}
                 onAdd={onAddToCart}
                 onFavorite={onAddToFavorite}
                 loading={isLoading}
             />
+                </Fragment>
         ))
     }
 

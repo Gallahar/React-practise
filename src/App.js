@@ -6,6 +6,7 @@ import Drawer from "./components/Drawer";
 import Home from "./pages/Home";
 import Favorites from "./pages/Favorites";
 import StorageContext from "./context";
+import Purchases from "./pages/Purchases";
 
 
 function App() {
@@ -17,37 +18,52 @@ function App() {
     const [isLoading, setIsLoading] = React.useState(true)
 
     React.useEffect(() => {
-        async function getData() {
+        const getData = async () => {
+            try {
+                const cartResponse = await axios.get('https://6339c674d6ef071af8164d58.mockapi.io/Cart')
+                const favoriteResponse = await axios.get('https://6339c674d6ef071af8164d58.mockapi.io/Favorite')
+                const productsResponse = await axios.get('https://6339c674d6ef071af8164d58.mockapi.io/products')
+                setIsLoading(false)
 
-            const cartResponse = await axios.get('https://6339c674d6ef071af8164d58.mockapi.io/Cart')
-            const favoriteResponse = await axios.get('https://6339c674d6ef071af8164d58.mockapi.io/Favorite')
-            const productsResponse = await axios.get('https://6339c674d6ef071af8164d58.mockapi.io/products')
-
-            setIsLoading(false)
-
-            setCartProducts(cartResponse.data)
-            setFavorites(favoriteResponse.data)
-            setProducts(productsResponse.data)
+                setCartProducts(cartResponse.data)
+                setFavorites(favoriteResponse.data)
+                setProducts(productsResponse.data)
+            } catch (error) {
+                alert('Не удалось получить данные с mockAPI')
+                console.error(error)
+            }
         }
 
         getData();
 
     }, [])
 
-    const onAddToCart = (obj) => {
-        if (cartProducts.find(cartObj => Number(cartObj.id) === Number(obj.id))) {
-            axios.delete(`https://6339c674d6ef071af8164d58.mockapi.io/Cart/${obj.id}`);
-            setCartProducts(prev => prev.filter(item => Number(item.id) !== Number(obj.id)));
-        } else {
-            axios.post('https://6339c674d6ef071af8164d58.mockapi.io/Cart', obj);
-            setCartProducts(prev => [...prev, obj]);
+    const onAddToCart = async (obj) => {
+        try { const findProduct = cartProducts.find(cartObj => Number(cartObj.mainId) === Number(obj.id))
+            if (findProduct) {
+                setCartProducts(prev => prev.filter(item => Number(item.mainId) !== Number(obj.id)));
+                await axios.delete(`https://6339c674d6ef071af8164d58.mockapi.io/Cart/${findProduct.id}`);
+            } else {
+                setCartProducts(prev => [...prev, obj]);
+               const {data} = await axios.post('https://6339c674d6ef071af8164d58.mockapi.io/Cart', obj);
+                setCartProducts((prev)=>prev.map((item)=>item.mainId===data.mainId?{...item,id: data.id}:item))
+            }
+
+        } catch (error) {
+            alert("Не удалось добавить товар в корзину")
+            console.error(error)
         }
 
     };
 
-    const removeFromCart = (id) => {
-        axios.delete(`https://6339c674d6ef071af8164d58.mockapi.io/Cart/${id}`)
-        setCartProducts((prev) => prev.filter(item => item.id !== id));
+    const removeFromCart = async (id) => {
+       try{
+           setCartProducts((prev) => prev.filter(item => Number(item.id) !== Number(id)));
+           await axios.delete(`https://6339c674d6ef071af8164d58.mockapi.io/Cart/${id}`)
+       }catch (error){
+           alert('Не удалось удалить товар из корзины')
+           console.error(error)
+       }
     };
 
     const onAddToFavorite = async (obj) => {
@@ -61,6 +77,7 @@ function App() {
             }
         } catch (error) {
             alert('Не удалось добавить в любимые товары!')
+            console.error(error)
         }
 
     };
@@ -69,10 +86,12 @@ function App() {
     const onChangeSearchInput = (event) => {
         setSearchInput(event.target.value)
 
+
     }
 
     const isProductChecked = (id) => {
-        return cartProducts.some(product => Number(product.id) === Number(id))
+        return cartProducts.some(product => Number(product.mainId) === Number(id))
+
     }
 
     return (
@@ -82,12 +101,13 @@ function App() {
             favorites,
             isProductChecked,
             onAddToFavorite,
+            onAddToCart,
             setCartOpened,
             setCartProducts
         }}>
             <div className="wrapper clear">
-                {cartOpened && <Drawer onRemoveFromCart={removeFromCart} products={cartProducts}
-                />}
+                <Drawer onRemoveFromCart={removeFromCart} products={cartProducts} opened={cartOpened}
+                />
                 <Header onClickCart={() => setCartOpened(true)}/>
                 <Routes>
                     <Route path="/" element={<Home cartProducts={cartProducts}
@@ -102,7 +122,9 @@ function App() {
 
                     />
                     <Route path="/favorites"
-                           element={<Favorites/>}/>
+                           element={<Favorites isLoading={isLoading}/>}/>
+                    <Route path="/purchases"
+                           element={<Purchases isLoading={isLoading}/>}/>
                 </Routes>
             </div>
         </StorageContext.Provider>

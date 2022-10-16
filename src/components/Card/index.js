@@ -13,16 +13,15 @@ function Card({
                   favorited = false,
                   loading = false
               }) {
-
+    const {isProductChecked} = React.useContext(StorageContext);
     const [isFavorite, setIsFavorite] = React.useState(favorited);
-    const {isProductChecked} = React.useContext(StorageContext)
-
+    const obj = {id, mainId: id, tittle, price, imgUrl}
     const onClickAdd = () => {
-        onAdd({id, tittle, price, imgUrl})
+        onAdd(obj);
 
     };
     const onClickFavorite = () => {
-        onFavorite({id, tittle, price, imgUrl})
+        onFavorite(obj);
         setIsFavorite(!isFavorite)
     };
 
@@ -52,8 +51,9 @@ function Card({
                         <span>Цена:</span>
                         <b>{price} руб.</b>
                     </div>
-                    <img onClick={onClickAdd} className={styles.plus}
-                         src={isProductChecked(id) ? "/img/btn-checked.svg" : "/img/add.svg"} alt="add"/>
+                    {onAdd &&
+                        (<img onClick={onClickAdd} className={styles.plus}
+                             src={isProductChecked(id) ? "/img/btn-checked.svg" : "/img/add.svg"} alt="add"/>)}
                 </div>
             </>}
         </div>
