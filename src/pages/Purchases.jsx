@@ -25,7 +25,7 @@ function Purchases({isLoading}) {
     return (
         <div className="content p-40 ">
             <div className="d-flex align-center mb-40 justify-between">
-                <h1>Мои покупки:</h1>
+                <h1>{purchases.length > 0 ? "Мои покупки" : ""}</h1>
             </div>
             <div className="d-flex flex-wrap">
                 {isLoading ? Array(8).fill(undefined).map((_, i) => <Card key={i}
