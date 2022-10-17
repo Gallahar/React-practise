@@ -16,6 +16,7 @@ function App() {
     const [searchInput, setSearchInput] = React.useState('')
     const [cartOpened, setCartOpened] = React.useState(false)
     const [isLoading, setIsLoading] = React.useState(true)
+    const [isOrderProceed, setIsOrderProceed] = React.useState(false)
 
     React.useEffect(() => {
         const getData = async () => {
@@ -103,7 +104,10 @@ function App() {
             onAddToFavorite,
             onAddToCart,
             setCartOpened,
-            setCartProducts
+            setCartProducts,
+            setIsOrderProceed,
+            isOrderProceed
+
         }}>
             <div className="wrapper clear">
                 <Drawer onRemoveFromCart={removeFromCart} products={cartProducts} opened={cartOpened}

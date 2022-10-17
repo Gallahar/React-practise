@@ -1,3 +1,32 @@
+.emptyContent{
+  margin-top: 250px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  width:  800px;
+  height:830px ;
+
+  .greenButton{
+    width: 245px;
+    margin-top: 20px;
+
+    &:hover {
+      img {
+        transform: rotate(180deg) translateX(3px);
+      }
+    }
+
+    img {
+      position: relative;
+      top: 1px;
+      transform: rotate(180deg);
+      margin-right: 15px;
+      transition: transform 0.15s ease-in-out;
+    }
+  }
+}
+
 body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
@@ -30,6 +59,7 @@ header {
 }
 
 .content {
+
   h1 {
     margin: 0;
   }
@@ -78,6 +108,7 @@ header {
   border-radius: 10px;
   padding: 0 15px;
   position: relative;
+
   .Clear{
     position: absolute;
     width: 18px;

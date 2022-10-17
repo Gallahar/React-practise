@@ -2,6 +2,7 @@ import React, {Fragment} from "react";
 import Card from "../components/Card";
 import axios from "axios";
 import StorageContext from "../context";
+import EmptyContent from "../components/EmptyContent";
 
 
 function Purchases({isLoading}) {
@@ -28,7 +29,7 @@ function Purchases({isLoading}) {
             </div>
             <div className="d-flex flex-wrap">
                 {isLoading ? Array(8).fill(undefined).map((_, i) => <Card key={i}
-                                                                          loading={isLoading}/>) : purchases.map(({
+                                                                          loading={isLoading}/>) :purchases.length>0? purchases.map(({
                                                                                                                       id,
                                                                                                                       products
                                                                                                                   }) => (
@@ -45,7 +46,8 @@ function Purchases({isLoading}) {
                             )
                         )}
                     </Fragment>
-                ))}
+                )):<EmptyContent img={"img/empty-purchases.jpg"} tittle={"У вас нету заказов"}
+                                 description={"Оформите хотя бы один заказ"}/>}
             </div>
         </div>
     )

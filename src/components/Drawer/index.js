@@ -1,12 +1,13 @@
-import React, {useEffect} from "react";
+import React, {useContext, useEffect} from "react";
 import axios from "axios";
 import State from "../State";
 import styles from './Drawer.module.scss'
 import {useCartProducts} from "../hooks/useCartProducts";
+import StorageContext from "../../context";
 
 function Drawer({onRemoveFromCart, products = [], opened}) {
+    const {isOrderProceed,setIsOrderProceed} = useContext(StorageContext)
     const {cartProducts, totalPriceCart, setCartProducts, setCartOpened} = useCartProducts()
-    const [isOrderProceed, setIsOrderProceed] = React.useState(false)
     const [orderId, setOrderId] = React.useState(null)
     const [orderPending, setOrderPending] = React.useState(false)
 
@@ -22,6 +23,7 @@ function Drawer({onRemoveFromCart, products = [], opened}) {
             await Promise.all(
                 cartProducts.map(({id}) => {
                     return axios.delete(`https://6339c674d6ef071af8164d58.mockapi.io/Cart/${id}`)
+
                 })
             )
         } catch (error) {
@@ -30,8 +32,6 @@ function Drawer({onRemoveFromCart, products = [], opened}) {
         }
         setOrderPending(!orderPending)
 
-
-        console.log(isOrderProceed)
     }
 //lock drawer scroll
     useEffect(() => {
@@ -43,6 +43,7 @@ function Drawer({onRemoveFromCart, products = [], opened}) {
             document.body.style.overflow = 'initial'
 
         }
+
     }, [opened])
 
     return (
@@ -80,7 +81,7 @@ function Drawer({onRemoveFromCart, products = [], opened}) {
                                     <div></div>
                                     <b>{Math.round(totalPriceCart * 0.05)} руб.</b></li>
                             </ul>
-                            <button disabled={orderPending} onClick={onClickOrder} className="greenButton">Оформить
+                            <button disabled={orderPending} onClick={onClickOrder}  className="greenButton">Оформить
                                 заказ <img
                                     src="img/arrowRight.svg" alt="arrowRight"/>
                             </button>
