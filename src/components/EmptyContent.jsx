@@ -9,7 +9,7 @@ export default function EmptyContent({img,tittle,description}) {
                 <img src={img} alt="пустые закладки"/>
                 <h1>{tittle}</h1>
                 <p>{description}</p>
-                <Link to="">
+                <Link to="/">
                     <button className="greenButton"><img src="img/arrowRight.svg" alt="arrow-left"/>Вернуться назад</button>
                 </Link>
             </div>
