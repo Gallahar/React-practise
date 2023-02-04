@@ -1,5 +1,5 @@
 import React from "react";
-import StorageContext from "../../context";
+import {StorageContext} from "../../context";
 
 
 export const useCartProducts = () => {

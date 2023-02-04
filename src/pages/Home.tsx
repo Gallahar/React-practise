@@ -1,31 +1,33 @@
 import Card from "../components/Card";
-import React,{Fragment} from "react"
+import {Loader} from "../components/Card/Skeleton"
+import React, {Fragment} from "react"
+import {StorageContext} from "../context";
 
-function Home({
-                  searchInput,
-                  setSearchInput,
-                  onChangeSearchInput,
-                  products,
-                  onAddToCart,
-                  onAddToFavorite,
-                  isLoading
-              }) {
 
+
+export const Home=()=> {
+    const {
+        searchInput,
+        setSearchInput,
+        onChangeSearchInput,
+        products,
+        onAddToCart,
+        onAddToFavorite,
+        isLoading
+    } = React.useContext(StorageContext)
 
     const renderProducts = () => {
-        const filteredProducts = products.filter(item => item.tittle.toLowerCase().includes(searchInput.toLowerCase()));
-        return   (isLoading ? Array(8).fill(undefined).map((_, i) => <Card onAdd={(obj)=>onAddToCart(obj)} key={i} loading={isLoading}/>)
-            : filteredProducts).map((item,id) => (
-                <Fragment  key={id}>
-            <Card
-                key={item.id}
-                {...item}
-                onAdd={onAddToCart}
-                onFavorite={onAddToFavorite}
-                loading={isLoading}
-            />
+        return  products
+            .filter(item => item.tittle.toLowerCase().includes(searchInput.toLowerCase()))
+            .map((item, id) => (
+                <Fragment key={id}>
+                    <Card
+                        {...item}
+                        onAdd={onAddToCart}
+                        onFavorite={onAddToFavorite}
+                    />
                 </Fragment>
-        ))
+            ))
     }
 
     return (
@@ -43,10 +45,9 @@ function Home({
                 </div>
             </div>
             <div className="d-flex flex-wrap">
-                {renderProducts()}
+                {isLoading?Loader:renderProducts()}
             </div>
         </div>
     )
 }
 
-export default Home

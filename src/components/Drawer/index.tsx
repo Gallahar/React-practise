@@ -3,13 +3,28 @@ import axios from "axios";
 import State from "../State";
 import styles from './Drawer.module.scss'
 import {useCartProducts} from "../hooks/useCartProducts";
-import StorageContext from "../../context";
+import {StorageContext, ICartProduct} from "../../context";
 
-function Drawer({onRemoveFromCart, products = [], opened}) {
-    const {isOrderProceed,setIsOrderProceed} = useContext(StorageContext)
+type TDrawerProps = {
+    opened: boolean;
+    products: ICartProduct[];
+}
+
+function Drawer({products, opened}: TDrawerProps) {
+    const {isOrderProceed, setIsOrderProceed} = useContext(StorageContext)
     const {cartProducts, totalPriceCart, setCartProducts, setCartOpened} = useCartProducts()
-    const [orderId, setOrderId] = React.useState(null)
+    const [orderId, setOrderId] = React.useState<null | number>(null)
     const [orderPending, setOrderPending] = React.useState(false)
+
+    const onRemoveFromCart = async (id: string) => {
+        try {
+            setCartProducts((prev) => prev.filter(item => Number(item.id) !== Number(id)));
+            await axios.delete(`https://6339c674d6ef071af8164d58.mockapi.io/Cart/${id}`)
+        } catch (error) {
+            alert('Не удалось удалить товар из корзины')
+            console.error(error)
+        }
+    };
 
     const onClickOrder = async () => {
 
@@ -43,7 +58,6 @@ function Drawer({onRemoveFromCart, products = [], opened}) {
             document.body.style.overflow = 'initial'
 
         }
-
     }, [opened])
 
     return (
@@ -75,13 +89,13 @@ function Drawer({onRemoveFromCart, products = [], opened}) {
                         <div className="cartTotalBlock">
                             <ul>
                                 <li><span>Итого:</span>
-                                    <div></div>
+                                    <div/>
                                     <b>{totalPriceCart} руб.</b></li>
                                 <li><span>Налог 5%:</span>
-                                    <div></div>
+                                    <div/>
                                     <b>{Math.round(totalPriceCart * 0.05)} руб.</b></li>
                             </ul>
-                            <button disabled={orderPending} onClick={onClickOrder}  className="greenButton">Оформить
+                            <button disabled={orderPending} onClick={onClickOrder} className="greenButton">Оформить
                                 заказ <img
                                     src="img/arrowRight.svg" alt="arrowRight"/>
                             </button>

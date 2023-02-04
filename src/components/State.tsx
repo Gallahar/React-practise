@@ -1,8 +1,14 @@
 import React from "react";
-import StorageContext from "../context";
+import {StorageContext} from "../context";
 
+type TStateProps = {
+    title:string;
+    image:string;
+    description:string;
 
-const State = ({title,image,description}) =>{
+}
+
+const State = ({title,image,description}:TStateProps) =>{
     const {setCartOpened,setIsOrderProceed} = React.useContext(StorageContext)
     return(
         <div className="cartEmpty d-flex align-center justify-center flex-column flex">

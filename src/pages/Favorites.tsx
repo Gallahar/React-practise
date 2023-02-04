@@ -1,19 +1,22 @@
 import React, {Fragment} from "react";
 import Card from "../components/Card";
-import StorageContext from "../context";
-import EmptyContent from "../components/EmptyContent";
+import {StorageContext} from "../context";
+import {EmptyContent} from "../components/EmptyContent";
+import {Loader} from "../components/Card/Skeleton"
 
+type TFavoritesProps ={
+    isLoading:boolean
+}
 
-function Favorites({isLoading}) {
+export const Favorites=({isLoading}:TFavoritesProps)=> {
     const {favorites, onAddToFavorite} = React.useContext(StorageContext)
     return (
         <div className="content p-40 ">
             <div className="d-flex align-center mb-40 justify-between">
-                <h1>{favorites.length > 0 ? "Товары которые вам понравились:" : ""}</h1>
+                {favorites.length > 0 ?<h1>Товары которые вам понравились:</h1>:null}
             </div>
             <div className="d-flex flex-wrap">
-                {isLoading ? Array(8).fill(undefined).map((_, i) => <Card key={i}
-                                                                          loading={isLoading}/>) : favorites.length > 0 ? favorites.map((item, id) => (
+                {isLoading ?Loader : favorites.length > 0 ? favorites.map((item, id) => (
                     <Fragment key={id}>
                         <Card
                             key={item.id}
@@ -21,7 +24,6 @@ function Favorites({isLoading}) {
                             imgUrl={item.imgUrl}
                             tittle={item.tittle}
                             id={item.id}
-                            favorited={true}
                             onFavorite={onAddToFavorite}
                         />
                     </Fragment>
@@ -32,4 +34,3 @@ function Favorites({isLoading}) {
     )
 }
 
-export default Favorites
